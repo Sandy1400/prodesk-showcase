@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PRODESK - Product Showcase</title>
+  <style>
+    :root{--accent:#d92b2b;--muted:#666}
+    body{font-family:Heebo, Arial, sans-serif; margin:0; background:#f7f7f8; color:#111}
+    header{background:#fff;padding:16px 20px;box-shadow:0 1px 6px rgba(0,0,0,.06);display:flex;align-items:center;gap:12px}
+    header h1{font-size:18px;margin:0}
+    .container{max-width:980px;margin:18px auto;padding:0 16px}
+    .top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .search{flex:1}
+    input[type=search]{width:100%;padding:10px;border-radius:8px;border:1px solid #e0e0e0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:18px}
+    .card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 6px rgba(0,0,0,.04);display:flex;flex-direction:column}
+    .thumb{height:150px;border-radius:8px;background:#eee;background-size:cover;background-position:center}
+    .title{font-weight:700;margin:10px 0 6px}
+    .price{color:var(--accent);font-weight:700}
+    .desc{color:var(--muted);font-size:13px;margin-top:6px}
+    footer.small{color:var(--muted);font-size:13px;margin-top:18px}
+    .qr{display:flex;gap:12px;align-items:center}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none}
+    @media(max-width:480px){.thumb{height:120px}}
+    /* simple product edit panel (for owner) */
+    details.owner{margin-top:16px}
+    textarea{width:100%;min-height:120px;font-family:monospace}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="" alt="logo" id="logo" style="width:44px;height:44px;background:#ddd;border-radius:8px;object-fit:cover">
+    <h1>PRODESK SUPPLIES - Product Showcase</h1>
+  </header>
+
+  <main class="container">
+    <div class="top">
+      <div class="search">
+        <input id="q" type="search" placeholder="Search products (নাম বা বর্ণনা) ...">
+      </div>
+      <div class="qr">
+        <div>
+          <img id="qrImg" src="" alt="QR code" style="width:80px;height:80px;border-radius:8px;border:1px solid #eee;background:#fff">
+        </div>
+        <div>
+          <div style="font-size:13px;color:#333">Scan to open this page</div>
+          <a id="openLink" class="btn" href="#">Open</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" id="productGrid"></div>
+
+    <footer class="small">এই পেজটি একটি সরল প্রদর্শনী পেজ — আপনি সহজেই পণ্য যোগ/অপসারণ করে নিতে পারবেন।</footer>
+
+    <details class="owner">
+      <summary style="cursor:pointer;padding:8px;background:#fff;border-radius:8px;margin-top:12px">Owner: Edit products (click to open)</summary>
+      <p style="font-size:13px;color:var(--muted)">Products are defined in JSON below. পরিবর্তন করে "Save changes" চাপুন।</p>
+      <textarea id="productJson"></textarea>
+      <div style="margin-top:8px"><button id="saveBtn" class="btn">Save changes</button></div>
+    </details>
+  </main>
+
+  <script>
+    // --- CONFIGURE BELOW ---
+    // Replace SITE_URL with the final hosted URL (where you publish this file). QR code will target that URL.
+    const SITE_URL = window.location.href; // replace with 'https://yourdomain.com' after hosting if you want QR to point to that
+
+    // Default products (changeable in the owner panel)
+    const DEFAULT_PRODUCTS = [
+      {id:1, name:'A4 PAPER SONALI 80GSM', price:'৳ 240', desc:'Ream of 500 sheets', img:''},
+      {id:2, name:'BALL PEN (Blue)', price:'৳ 15', desc:'Smooth gel pen', img:''},
+      {id:3, name:'BOX FILE (A4)', price:'৳ 120', desc:'Durable box file for office', img:''}
+    ];
+
+    // --- DO NOT EDIT BELOW UNLESS YOU KNOW JS ---
+    const productGrid = document.getElementById('productGrid');
+    const qInput = document.getElementById('q');
+    const productJson = document.getElementById('productJson');
+    const saveBtn = document.getElementById('saveBtn');
+    const qrImg = document.getElementById('qrImg');
+    const openLink = document.getElementById('openLink');
+
+    function loadProducts(){
+      const saved = localStorage.getItem('prodesk_products');
+      if(saved){
+        try{ return JSON.parse(saved); } catch(e){ return DEFAULT_PRODUCTS; }
+      }
+      return DEFAULT_PRODUCTS;
+    }
+    let products = loadProducts();
+
+    function renderGrid(filtered){
+      productGrid.innerHTML = '';
+      (filtered || products).forEach(p=>{
+        const card = document.createElement('div'); card.className='card';
+        const thumb = document.createElement('div'); thumb.className='thumb'; thumb.style.backgroundImage = p.img?`url(${p.img})`:'linear-gradient(135deg,#eee,#f6f6f6)';
+        const title = document.createElement('div'); title.className='title'; title.textContent = p.name;
+        const price = document.createElement('div'); price.className='price'; price.textContent = p.price || '';
+        const desc = document.createElement('div'); desc.className='desc'; desc.textContent = p.desc || '';
+        card.appendChild(thumb); card.appendChild(title); card.appendChild(price); card.appendChild(desc);
+        productGrid.appendChild(card);
+      });
+    }
+
+    function refreshUI(){
+      renderGrid();
+      productJson.value = JSON.stringify(products, null, 2);
+      // QR code image using Google Charts API
+      const qrUrl = 'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=' + encodeURIComponent(SITE_URL) + '&choe=UTF-8';
+      qrImg.src = qrUrl;
+      openLink.href = SITE_URL;
+      openLink.target = '_blank';
+    }
+
+    qInput.addEventListener('input', ()=>{
+      const q = qInput.value.trim().toLowerCase();
+      if(!q) return renderGrid();
+      const filtered = products.filter(p => (p.name + ' ' + (p.desc||'') + ' ' + (p.price||'')).toLowerCase().includes(q));
+      renderGrid(filtered);
+    });
+
+    saveBtn.addEventListener('click', ()=>{
+      try{
+        const parsed = JSON.parse(productJson.value);
+        products = parsed;
+        localStorage.setItem('prodesk_products', JSON.stringify(products));
+        alert('Products saved locally. Refresh page to confirm.');
+        renderGrid();
+      }catch(e){ alert('JSON parsing error: ' + e.message); }
+    });
+
+    // initialise
+    refreshUI();
+  </script>
+</body>
+</html>
