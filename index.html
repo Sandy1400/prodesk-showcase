@@ -23,7 +23,6 @@
     .qr{display:flex;gap:12px;align-items:center}
     .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none}
     @media(max-width:480px){.thumb{height:120px}}
-    /* simple product edit panel (for owner) */
     details.owner{margin-top:16px}
     textarea{width:100%;min-height:120px;font-family:monospace}
   </style>
@@ -63,18 +62,235 @@
   </main>
 
   <script>
-    // --- CONFIGURE BELOW ---
-    // Replace SITE_URL with the final hosted URL (where you publish this file). QR code will target that URL.
-    const SITE_URL = window.location.href; // replace with 'https://yourdomain.com' after hosting if you want QR to point to that
+    const SITE_URL = window.location.href;
 
-    // Default products (changeable in the owner panel)
     const DEFAULT_PRODUCTS = [
-      {id:1, name:'A4 PAPER SONALI 80GSM', price:'৳ 240', desc:'Ream of 500 sheets', img:''},
-      {id:2, name:'BALL PEN (Blue)', price:'৳ 15', desc:'Smooth gel pen', img:''},
-      {id:3, name:'BOX FILE (A4)', price:'৳ 120', desc:'Durable box file for office', img:''}
-    ];
+  {
+    "id": 1,
+    "name": "A4 PAPER SONALI 80GSM  / A4 কাগজ সোনালী 80GSM",
+    "price": "৳ 405",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 2,
+    "name": "A4 PAPER ALIGHT 80GSM/A4 কাগজ অ্যালাইট 80GSM",
+    "price": "৳ 405",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 3,
+    "name": "A4 PAPER FRESS 70GSM/A4 কাগজ ফ্রেশ 70GSM",
+    "price": "৳ 335",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 4,
+    "name": "A4 PAPER PAPER TEC 80GSM/ A4 কাগজ পেপার টেক 80GSM",
+    "price": "৳ 410",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 5,
+    "name": "AIR FRESHNER/এয়ার ফ্রেশনার",
+    "price": "৳ 320",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 6,
+    "name": "BALL PEN/বলপেন",
+    "price": "৳ 10",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 7,
+    "name": "BINDING TAPE/বাইন্ডিং টেপ",
+    "price": "৳ 50",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 8,
+    "name": "Biscuit/বিস্কুট",
+    "price": "৳ 90",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 9,
+    "name": "BOOK SIDE TAPE/বইয়ের সাইড টেপ",
+    "price": "",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 10,
+    "name": "BOX FILE/বক্স ফাইল",
+    "price": "৳ 55",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 11,
+    "name": "BOX TISSUE/বক্স টিস্যু",
+    "price": "৳ 70",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 12,
+    "name": "CALCULATIOR/ক্যালকুলেটর",
+    "price": "",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 13,
+    "name": "COAT FILE/কোট ফাইল",
+    "price": "৳ 30",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 14,
+    "name": "CUTTER/কাটার",
+    "price": "৳ 10",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 15,
+    "name": "GLASS CLEANER/কাচ পরিষ্কারক",
+    "price": "৳ 220",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 16,
+    "name": "GLUE/আঠা",
+    "price": "৳ 60",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 17,
+    "name": "HAND TAOIL TISSSUE/হাত মোছার টিস্যু",
+    "price": "৳ 70",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 18,
+    "name": "HAND WASH/হ্যান্ড ওয়াশ",
+    "price": "৳ 110",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 19,
+    "name": "HIGHLIGHT MARKER /হাইলাইট মার্কার",
+    "price": "৳ 30",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 20,
+    "name": "ODONIL/ওডোনিল",
+    "price": "৳ 55",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 21,
+    "name": "OFFICE FILE/অফিস ফাইল",
+    "price": "৳ 20",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 22,
+    "name": "PENCIL/পেন্সিল",
+    "price": "৳ 10",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 23,
+    "name": "PUNCH MACHINE/পাঞ্চ মেশিন",
+    "price": "৳ 150",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 24,
+    "name": "RING FILE /রিং ফাইল",
+    "price": "৳ 85",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 25,
+    "name": "RUBBER/রাবার",
+    "price": "৳ 10",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 26,
+    "name": "SCALE/স্কেল",
+    "price": "৳ 30",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 27,
+    "name": "STAPLER/স্ট্যাপলার",
+    "price": "৳ 180",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 28,
+    "name": "TOILET TISSUE/টয়লেট টিস্যু",
+    "price": "৳ 250",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 29,
+    "name": "SUGAR/চিনি",
+    "price": "৳ 115",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 30,
+    "name": "TEA BAG/চা ব্যাগ",
+    "price": "৳ 85",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 31,
+    "name": "TEA LEAF 🌿 (200G)/\nচা পাতা 🌿 (২০০ গ্রাম)",
+    "price": "৳ 110",
+    "desc": "",
+    "img": ""
+  },
+  {
+    "id": 32,
+    "name": "NESCAFE COFFEE (500G)/নেসকাফে কফি (৫০০ গ্রাম)",
+    "price": "৳ 630",
+    "desc": "",
+    "img": ""
+  }
+];
 
-    // --- DO NOT EDIT BELOW UNLESS YOU KNOW JS ---
     const productGrid = document.getElementById('productGrid');
     const qInput = document.getElementById('q');
     const productJson = document.getElementById('productJson');
@@ -107,7 +323,6 @@
     function refreshUI(){
       renderGrid();
       productJson.value = JSON.stringify(products, null, 2);
-      // QR code image using Google Charts API
       const qrUrl = 'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=' + encodeURIComponent(SITE_URL) + '&choe=UTF-8';
       qrImg.src = qrUrl;
       openLink.href = SITE_URL;
@@ -131,7 +346,6 @@
       }catch(e){ alert('JSON parsing error: ' + e.message); }
     });
 
-    // initialise
     refreshUI();
   </script>
 </body>
