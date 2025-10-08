@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRODESK – Product Showcase</title>
+<style>
+:root{--accent:#ff4d4f;--muted:#666}
+*{box-sizing:border-box}
+body{font-family:Heebo,Arial,sans-serif;margin:0;background:#f7f7f8;color:#111}
+header{background:#fff;padding:16px 20px;box-shadow:0 1px 6px rgba(0,0,0,.06);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:18px;margin:0}
+.container{max-width:1100px;margin:16px auto;padding:0 16px}
+.top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+input[type=search]{width:100%;max-width:420px;padding:12px;border:1px solid #e0e0e0;border-radius:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:16px}
+.card{background:#fff;border:1px solid #ececec;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:260px}
+.thumb{height:160px;background:#eee;display:flex;align-items:center;justify-content:center}
+.thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.title{padding:10px 12px 0 12px;font-weight:600;line-height:1.35}
+.meta{padding:8px 12px 12px 12px;color:#555;font-size:13px}
+.price{color:var(--accent);font-weight:700;margin-top:4px}
+.badge{display:inline-block;background:#eef;padding:2px 8px;border-radius:999px;font-size:12px;color:#335}
+footer{text-align:center;color:#777;font-size:12px;margin:26px 0}
+.small{font-size:11px}
+</style>
+</head>
+<body>
+<header class="container">
+  <img src="images/logo.png" alt="logo" width="32" onerror="this.style.display='none'">
+  <h1>PRODESK SUPPLIES – Product Showcase</h1>
+</header>
+
+<div class="container">
+  <div class="top">
+    <input id="q" type="search" placeholder="পণ্য খুঁজুন (নাম লিখুন)…" oninput="filter()">
+    <span class="small">মোট পণ্য: <b id="count"></b></span>
+  </div>
+
+  <div id="grid" class="grid"></div>
+</div>
+
+<footer>© PRODESK SUPPLIES</footer>
+
+<script>
+const PRODUCTS = [{'name': 'A4 PAPER SONALI 80GSM  / A4 কাগজ সোনালী 80GSM', 'price': '405.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/a4_paper_sonali.png'}, {'name': 'A4 PAPER ALIGHT 80GSM/A4 কাগজ অ্যালাইট 80GSM', 'price': '405.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/a4_paper_alight.png'}, {'name': 'A4 PAPER FRESS 70GSM/A4 কাগজ ফ্রেশ 70GSM', 'price': '335.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/a4_paper_fress.png'}, {'name': 'A4 PAPER PAPER TEC 80GSM/ A4 কাগজ পেপার টেক 80GSM', 'price': '410.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/a4_paper_tec.png'}, {'name': 'AIR FRESHNER/এয়ার ফ্রেশনার', 'price': '320.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/air_freshner.png'}, {'name': 'BALL PEN/বলপেন', 'price': '10.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/ball_pen.png'}, {'name': 'BINDING TAPE/বাইন্ডিং টেপ', 'price': '50.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/binding_tape.png'}, {'name': 'Biscuit/বিস্কুট', 'price': '90.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/biscuit.png'}, {'name': 'BOOK SIDE TAPE/বইয়ের সাইড টেপ', 'price': 'nan', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/book_side_tape.png'}, {'name': 'BOX FILE/বক্স ফাইল', 'price': '55.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/box_file.png'}, {'name': 'BOX TISSUE/বক্স টিস্যু', 'price': '70.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/box_tissue.png'}, {'name': 'CALCULATIOR/ক্যালকুলেটর', 'price': 'nan', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/calculatior.png'}, {'name': 'COAT FILE/কোট ফাইল', 'price': '30.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/coat_file.png'}, {'name': 'CUTTER/কাটার', 'price': '10.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/cutter.png'}, {'name': 'GLASS CLEANER/কাচ পরিষ্কারক', 'price': '220.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/glass_cleaner.png'}, {'name': 'GLUE/আঠা', 'price': '60.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/glue.png'}, {'name': 'HAND TAOIL TISSUE/হাত মোছার টিস্যু', 'price': '70.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/hand_taoil_tissue.png'}, {'name': 'HAND WASH/হ্যান্ড ওয়াশ', 'price': '110.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/hand_wash.png'}, {'name': 'HIGHLIGHT MARKER /হাইলাইট মার্কার', 'price': '30.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/highlight_marker.png'}, {'name': 'ODONIL/ওডোনিল', 'price': '55.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/odonil.png'}, {'name': 'OFFICE FILE/অফিস ফাইল', 'price': '20.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/office_file.png'}, {'name': 'PENCIL/পেন্সিল', 'price': '10.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/pencil.png'}, {'name': 'PUNCH MACHINE/পাঞ্চ মেশিন', 'price': '150.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/punch_machine.png'}, {'name': 'RING FILE /রিং ফাইল', 'price': '85.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/ring_file.png'}, {'name': 'RUBBER/রাবার', 'price': '10.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/rubber.png'}, {'name': 'SCALE/স্কেল', 'price': '30.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/scale.png'}, {'name': 'STAPLER/স্ট্যাপলার', 'price': '180.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/stapler.png'}, {'name': 'TOILET TISSUE/টয়লেট টিস্যু', 'price': '250.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/toile_tissue.png'}, {'name': 'SUGAR/চিনি', 'price': '115.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/sugar.png'}, {'name': 'TEA BAG/চা ব্যাগ', 'price': '85.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/tea_bag.png'}, {'name': 'TEA LEAF 🌿 (200G)/\nচা পাতা 🌿 (২০০ গ্রাম)', 'price': '110.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/tea_leaf.png'}, {'name': 'NESCAFE COFFEE (500G)/নেসকাফে কফি (৫০০ গ্রাম)', 'price': '630.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/nescafe_coffee.png'}, {'name': '28', 'price': '4410.0', 'qty': 'nan', 'desc': '', 'img': 'https://sandy1400.github.io/prodesk-showcase/images/nan'}];
+
+function card(p){
+  const img = p.img ? `<img src="${p.img}" alt="">` : "";
+  const qty = p.qty ? `<span class="badge">${p.qty}</span>` : "";
+  const desc = p.desc ? `<div class="small" style="margin-top:4px">${p.desc}</div>` : "";
+  return `<div class="card">
+    <div class="thumb">${img}</div>
+    <div class="title">${p.name}</div>
+    <div class="meta">
+      ${qty}
+      <div class="price">${p.price || ""}</div>
+      ${desc}
+    </div>
+  </div>`;
+}
+
+function render(list){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = list.map(card).join('');
+  document.getElementById('count').textContent = list.length;
+}
+
+function filter(){
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const list = PRODUCTS.filter(p => (p.name||'').toLowerCase().includes(q));
+  render(list);
+}
+
+render(PRODUCTS);
+</script>
+</body>
+</html>
